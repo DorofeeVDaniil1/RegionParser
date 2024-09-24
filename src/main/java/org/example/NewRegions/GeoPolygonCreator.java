@@ -1,5 +1,7 @@
 package org.example.NewRegions;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,16 +14,18 @@ import org.example.Configuration.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static com.sun.jmx.defaults.ServiceName.DOMAIN;
 import static org.example.BearToken.BearTocken.getIdToken;
 import static org.example.Main.PLACE;
+import static org.example.NewRegions.FindRegionCoordinates.OUTPUT_FILE;
 
 public class GeoPolygonCreator {
 
-    private static final String DOMAIN = "amur.mytko.ru";
 
-    private static final JSONObject GEOJSON = (JSONObject) loadGeoJsonFromResources("coordinates.json");
 
-    public static void RunParserDBCoordinates(Boolean DEBUG_MODE) {
+
+    public  void RunParserDBCoordinates(Boolean DEBUG_MODE) {
+        JSONObject GEOJSON =  loadGeoJsonFromFileSystem(OUTPUT_FILE);
         JSONArray features = GEOJSON.getJSONArray("features");
         for (int i = 0; i < features.length(); i++) {
             JSONObject feature = features.getJSONObject(i);
@@ -36,11 +40,8 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static JSONObject loadGeoJsonFromResources(String fileName) {
-        try (InputStream inputStream = GeoPolygonCreator.class.getClassLoader().getResourceAsStream(fileName)) {
-            if (inputStream == null) {
-                throw new RuntimeException("Ресурс не найден: " + fileName);
-            }
+    private JSONObject loadGeoJsonFromFileSystem(String filePath) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             // Преобразование InputStream в строку
             String json = new Scanner(inputStream, StandardCharsets.UTF_8).useDelimiter("\\A").next();
             // Преобразование строки в JSONObject
@@ -51,7 +52,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void debugGeoJSON(String type, JSONArray coordinates) {
+    private  void debugGeoJSON(String type, JSONArray coordinates) {
         System.out.println("Type: " + type);
         if ("MultiPolygon".equals(type)) {
             for (int i = 0; i < coordinates.length(); i++) {
@@ -71,7 +72,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void processGeoJSON(String type, JSONArray coordinates, String name) {
+    private  void processGeoJSON(String type, JSONArray coordinates, String name) {
         if ("MultiPolygon".equals(type)) {
             for (int i = 0; i < coordinates.length(); i++) {
                 JSONArray polygon = coordinates.getJSONArray(i);
@@ -88,7 +89,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void setGeoPoly(JSONArray coords, String name, String type) {
+    private  void setGeoPoly(JSONArray coords, String name, String type) {
         String query = "mutation createGeoPolygon($lanlngSet: [LatLngInput]){  createGeoPolygon(lanlngSet: $lanlngSet){ id }}";
         JSONObject json = new JSONObject();
         json.put("query", query);
@@ -113,7 +114,7 @@ public class GeoPolygonCreator {
         sendGeoPolyRequest(json, name, type);
     }
 
-    private static void sendGeoPolyRequest(JSONObject json, String name, String type) {
+    private  void sendGeoPolyRequest(JSONObject json, String name, String type) {
         Config config = new Config();
         String TOKEN = getIdToken();
         try {

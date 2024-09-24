@@ -13,38 +13,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static org.example.NewRegions.GeoPolygonCreator.RunParserDBCoordinates;
 
 public class FindRegionCoordinates {
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    private static final String OUTPUT_FILE = "D:\\Styding\\Java Spring\\NodeParcer\\src\\main\\resources\\coordinates.json";
-
-    public static List<String> getPlacesFromExcel(String input_file_path){
-        List<String> places = new ArrayList<>();
-
-        try (FileInputStream fis = new FileInputStream(input_file_path);
-             Workbook workbook = new XSSFWorkbook(fis)) {
-
-            Sheet sheet = workbook.getSheetAt(0);
-
-            for (Row row:sheet){
-                Cell cell = row.getCell(3);
-
-                if (cell!= null && cell.getCellType()== CellType.STRING){
-                    places.add(cell.getStringCellValue());
-
-                }
-            }
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return places;
-    }
-
+    public static final String OUTPUT_FILE = "D:\\Styding\\Java Spring\\NodeParcer\\src\\main\\resources\\coordinates.json";
     public static void findCoordinatesRegions(String region, String place) {
         try {
             // Получаем границы области (bounding box) для заданного региона
@@ -76,7 +49,7 @@ public class FindRegionCoordinates {
                 String placeType = result.getString("type");
 
                 // Выводим результат только для городов, поселков и деревень
-                if (placeType.equals("village") || placeType.equals("town") || placeType.equals("city")) {
+                if (placeType.equals("village") || placeType.equals("town") || placeType.equals("city")||placeType.equals("administrative")) {
                     if (result.has("geojson")) {
                         JSONObject geojson = result.getJSONObject("geojson");
                         if (geojson.has("coordinates")) {
