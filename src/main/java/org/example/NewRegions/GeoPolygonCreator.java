@@ -1,34 +1,27 @@
-package org.example;
+package org.example.NewRegions;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
+import org.example.Configuration.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import static org.example.BearToken.BearTocken.getIdToken;
+import static org.example.Main.PLACE;
 
 public class GeoPolygonCreator {
 
-    private static final String DOMAIN = "домен";
-    private static final String TOKEN = "КОД";
-    private static final boolean DEBUG_MODE = false;
+    private static final String DOMAIN = "amur.mytko.ru";
 
     private static final JSONObject GEOJSON = (JSONObject) loadGeoJsonFromResources("coordinates.json");
 
-    public static void main(String[] args) {
+    public static void RunParserDBCoordinates(Boolean DEBUG_MODE) {
         JSONArray features = GEOJSON.getJSONArray("features");
         for (int i = 0; i < features.length(); i++) {
             JSONObject feature = features.getJSONObject(i);
@@ -121,6 +114,8 @@ public class GeoPolygonCreator {
     }
 
     private static void sendGeoPolyRequest(JSONObject json, String name, String type) {
+        Config config = new Config();
+        String TOKEN = getIdToken();
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -136,7 +131,7 @@ public class GeoPolygonCreator {
             JSONObject responseBody = new JSONObject(response.body());
             String id = responseBody.getJSONObject("data").getJSONObject("createGeoPolygon").getString("id");
             System.out.println(name + " [" + type + "] : " + id);
-            System.out.println("select new_region(название ,'"+id+"', уровень);");;
+            System.out.println("select new_region('"+ PLACE +"' ,'"+id+"', уровень);");;
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
