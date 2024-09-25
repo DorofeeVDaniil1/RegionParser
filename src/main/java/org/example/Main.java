@@ -59,16 +59,13 @@ public class Main {
                 region = sc.nextLine();
                 System.out.println("Введите Название участка:");
                 place = sc.nextLine();
-                if (findCoordinatesRegions(region, place, path)){
-                    continue;
-                }
-                else {
-                    break;
+                if (!findCoordinatesRegions(region, place, path)) {
+                    break;  // Выход из цикла, если координаты не найдены
                 }
             }
 
             if (type.equals("1")) {
-                System.out.println("Проверьте, что вы изменили файл по пути "+path);
+                System.out.println("Проверьте, что вы изменили файл по пути " + path);
             }
 
             // Общая логика выполнения парсера
