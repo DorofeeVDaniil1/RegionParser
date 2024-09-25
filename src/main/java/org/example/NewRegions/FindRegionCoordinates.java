@@ -5,11 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,8 +13,7 @@ import org.json.JSONObject;
 public class FindRegionCoordinates {
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    public static final String OUTPUT_FILE = "D:\\Styding\\Java Spring\\NodeParcer\\src\\main\\resources\\coordinates.json";
-    public static void findCoordinatesRegions(String region, String place) {
+    public static void findCoordinatesRegions(String region, String place, String path) {
         try {
             // Получаем границы области (bounding box) для заданного региона
             String regionBoundingBox = getRegionBoundingBox(region);
@@ -82,9 +77,9 @@ public class FindRegionCoordinates {
             featureCollection.put("features", features);
 
             // Записываем форматированный JSON в файл
-            try (FileWriter file = new FileWriter(OUTPUT_FILE)) {
+            try (FileWriter file = new FileWriter(path)) {
                 file.write(featureCollection.toString(2)); // Форматированный вывод
-                System.out.println("JSON записан в файл: " + OUTPUT_FILE);
+                System.out.println("JSON записан в файл: " + path);
             }
 
         } catch (Exception e) {

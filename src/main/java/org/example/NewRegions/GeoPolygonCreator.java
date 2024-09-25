@@ -1,6 +1,5 @@
 package org.example.NewRegions;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
@@ -15,17 +14,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static com.sun.jmx.defaults.ServiceName.DOMAIN;
-import static org.example.BearToken.BearTocken.getIdToken;
-import static org.example.Main.PLACE;
-import static org.example.NewRegions.FindRegionCoordinates.OUTPUT_FILE;
+import static org.example.Main.authToken;
 
 public class GeoPolygonCreator {
 
 
 
 
-    public  void RunParserDBCoordinates(Boolean DEBUG_MODE) {
-        JSONObject GEOJSON =  loadGeoJsonFromFileSystem(OUTPUT_FILE);
+    public  void RunParserDBCoordinates(Boolean DEBUG_MODE, String path) {
+        JSONObject GEOJSON =  loadGeoJsonFromFileSystem(path);
         JSONArray features = GEOJSON.getJSONArray("features");
         for (int i = 0; i < features.length(); i++) {
             JSONObject feature = features.getJSONObject(i);
@@ -40,7 +37,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private JSONObject loadGeoJsonFromFileSystem(String filePath) {
+    private static JSONObject loadGeoJsonFromFileSystem(String filePath) {
         try (InputStream inputStream = new FileInputStream(filePath)) {
             // Преобразование InputStream в строку
             String json = new Scanner(inputStream, StandardCharsets.UTF_8).useDelimiter("\\A").next();
@@ -115,8 +112,7 @@ public class GeoPolygonCreator {
     }
 
     private  void sendGeoPolyRequest(JSONObject json, String name, String type) {
-        Config config = new Config();
-        String TOKEN = getIdToken();
+        String TOKEN = authToken;
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -132,7 +128,7 @@ public class GeoPolygonCreator {
             JSONObject responseBody = new JSONObject(response.body());
             String id = responseBody.getJSONObject("data").getJSONObject("createGeoPolygon").getString("id");
             System.out.println(name + " [" + type + "] : " + id);
-            System.out.println("select new_region('"+ PLACE +"' ,'"+id+"', уровень);");;
+            System.out.println("select new_region('"+ "Название региона" +"' ,'"+id+"', уровень);");;
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
