@@ -33,10 +33,6 @@ public class Config {
         return PASSWORD;
     }
 
-    public String getOUTPUT_FILE_PATH() {
-        return OUTPUT_FILE_PATH;
-    }
-
     public String create_txt_file_from_path() {
         File directory = new File(OUTPUT_FILE_PATH);
         File file = new File(directory, "coordinates.json");
