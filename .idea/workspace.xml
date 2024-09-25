@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Дополнено Read.me">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Configuration/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Configuration/Config.java" afterDir="false" />
+    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Изменена обработка Смены региона">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/NewRegions/GeoPolygonCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/NewRegions/GeoPolygonCreator.java" afterDir="false" />
     </list>
@@ -174,6 +175,7 @@
       <workItem from="1727145500617" duration="490000" />
       <workItem from="1727241443973" duration="1540000" />
       <workItem from="1727246928203" duration="1275000" />
+      <workItem from="1727251002114" duration="4346000" />
     </task>
     <task id="LOCAL-00001" summary="Новая версия">
       <option name="closed" value="true" />
@@ -255,7 +257,23 @@
       <option name="project" value="LOCAL" />
       <updated>1727247932296</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Исправлена ошибка в отправке запроса">
+      <option name="closed" value="true" />
+      <created>1727250013350</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1727250013350</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Изменена обработка Смены региона">
+      <option name="closed" value="true" />
+      <created>1727254372176</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1727254372176</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,17 +287,8 @@
     <MESSAGE value="Создана консольная утилита для добавления участков" />
     <MESSAGE value="Config файл для подключения." />
     <MESSAGE value="Дополнено Read.me" />
-    <option name="LAST_COMMIT_MESSAGE" value="Дополнено Read.me" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/example/Main.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Исправлена ошибка в отправке запроса" />
+    <MESSAGE value="Изменена обработка Смены региона" />
+    <option name="LAST_COMMIT_MESSAGE" value="Изменена обработка Смены региона" />
   </component>
 </project>

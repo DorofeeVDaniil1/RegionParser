@@ -43,7 +43,7 @@ public class FindRegionCoordinates {
                 JSONObject result = jsonArray.getJSONObject(i);
                 String placeType = result.getString("type");
 
-                // Выводим результат только для городов, поселков и деревень
+                // Выводим результат только для городов, поселков и деревень и округов
                 if (placeType.equals("village") || placeType.equals("town") || placeType.equals("city")||placeType.equals("administrative")) {
                     if (result.has("geojson")) {
                         JSONObject geojson = result.getJSONObject("geojson");

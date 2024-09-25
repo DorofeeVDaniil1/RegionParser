@@ -18,7 +18,16 @@ public class Main {
         GeoPolygonCreator geoPolygonCreator = new GeoPolygonCreator();
         Scanner sc = new Scanner(System.in);
 
-        // Получение пользовательских данных для конфигурации
+        Config config = getUserConfig(sc);
+        String path = config.create_txt_file_from_path();  // Создание файла по указанному пути
+        authToken = getIdToken(config);  // Получение JWT токена
+
+        String type = getLaunchType(sc);
+        executeTask(sc, geoPolygonCreator, path, type);
+    }
+
+    // Метод для получения конфигурации от пользователя
+    private static Config getUserConfig(Scanner sc) {
         System.out.println("Введите домен для сайта:");
         domain = sc.nextLine();
         System.out.println("Введите Логин пользователя:");
@@ -28,50 +37,75 @@ public class Main {
         System.out.println("Введите путь для сохранения файла (например: C:/Users/user/Documents):");
         String outputFilePath = sc.nextLine();
 
-        // Создание объекта config для подключения к базе Личного кабинета
-        Config config = new Config(username, password, domain, outputFilePath);
-        String path = config.create_txt_file_from_path();  // Создание файла по указанному пути
+        return new Config(username, password, domain, outputFilePath);
+    }
 
-        // Получение JWT токена
-        authToken = getIdToken(config);
+    // Метод для выбора типа запуска
+    private static String getLaunchType(Scanner sc) {
+        System.out.println("Как вы хотите запустить программу? (Введите цифру 1/2)\n" +
+                "1 - Свой GeoJSON файл\n" +
+                "2 - Автоматическое создание GeoJson файла по названию региона и участка?");
+        return sc.nextLine();
+    }
 
-        // Начало цикла выполнения
-        System.out.println("Начать запуск? Y/N");
-        String trigger = sc.nextLine();
 
-        if (trigger.equalsIgnoreCase("Y")) {
-            String region = null;
-
-            while (true) {
-                // Ввод региона, если он не задан
-                if (region == null) {
-                    System.out.println("Введите Регион, где будет участок:");
-                    region = sc.nextLine();
-                }
-
-                // Ввод названия участка
+    // Метод для выполнения основной задачи
+    private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path, String type) {
+        String region = null;
+        boolean debugMode;
+        while (true) {
+            if (type.equals("2") && region == null) {
+                System.out.println("Введите Регион, где будет участок:");
+                region = sc.nextLine();
                 System.out.println("Введите Название участка:");
                 place = sc.nextLine();
                 findCoordinatesRegions(region, place, path);
+            }
 
-                // Запуск процесса в зависимости от отладочного режима
-                System.out.println("Хотите запустить без тестового запуска? Y/N");
-                boolean debugMode = !sc.nextLine().equalsIgnoreCase("Y");
-                geoPolygonCreator.RunParserDBCoordinates(debugMode, path);
+            if (type.equals("1")) {
+                System.out.println("Проверьте, что вы изменили файл по пути "+path);
+            }
 
-                // Спросить о повторном запуске
-                System.out.println("1) Повторить запуск?  Y/N\n 2) Повторить запуск и сменить регион? YES/NO ");
+            // Общая логика выполнения парсера
+            debugMode = isDebugMode(sc);
+            geoPolygonCreator.RunParserDBCoordinates(debugMode, path);
+
+            // Если тестовый режим был включен, предложить выполнить без теста
+            if (debugMode) {
+                System.out.println("Хотите выполнить эту же строку без теста? Y/N");
                 if (sc.nextLine().equalsIgnoreCase("Y")) {
-
-                } else if (sc.nextLine().equalsIgnoreCase("YES")) {
-                    region = null;
-                }
-                else {
-                    break;  // Завершаем цикл, если пользователь не хочет повторять
+                    debugMode = false; // Отключаем режим тестирования
+                    geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста
                 }
             }
-        } else {
-            System.out.println("Запуск отменен.");
+
+            if (!askForRestart(sc)) {
+                break;
+            }
+
+            if (askForRegionChange(sc)) {
+                region = null;
+            }
         }
+    }
+
+
+
+    // Метод для проверки режима отладки
+    private static boolean isDebugMode(Scanner sc) {
+        System.out.println("Хотите запустить без тестового запуска? Y/N");
+        return !sc.nextLine().equalsIgnoreCase("Y");
+    }
+
+    // Метод для запроса на повторный запуск
+    private static boolean askForRestart(Scanner sc) {
+        System.out.println("Повторить запуск? Y/N");
+        return sc.nextLine().equalsIgnoreCase("Y");
+    }
+
+    // Метод для запроса на смену региона
+    private static boolean askForRegionChange(Scanner sc) {
+        System.out.println("Повторить запуск и сменить регион? YES/NO");
+        return sc.nextLine().equalsIgnoreCase("YES");
     }
 }
