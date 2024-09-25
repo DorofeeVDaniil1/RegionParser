@@ -9,11 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Переезд на 11 версию java и остановка приложения если не получилось найти регион.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Переезд на 11 версию java и остановка приложения если не получилось найти регион." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -54,7 +50,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "find__all__subregions__APPLICATION",
-    "last_opened_file_path": "D:/Styding/Java Spring/NodeParcer/src/main/resources",
+    "last_opened_file_path": "D:/Styding/Java Spring/NodeParcer/images/Repeat.png",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -183,7 +179,7 @@
       <workItem from="1727145500617" duration="490000" />
       <workItem from="1727241443973" duration="1540000" />
       <workItem from="1727246928203" duration="1275000" />
-      <workItem from="1727251002114" duration="9449000" />
+      <workItem from="1727251002114" duration="9955000" />
     </task>
     <task id="LOCAL-00001" summary="Новая версия">
       <option name="closed" value="true" />
@@ -297,7 +293,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727259746947</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Переезд на 11 версию java и остановка приложения если не получилось найти регион.">
+      <option name="closed" value="true" />
+      <created>1727263139158</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1727263139158</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
