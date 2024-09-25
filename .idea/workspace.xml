@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Config файл для подключения." />
+    <list default="true" id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="Дополнено Read.me">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,6 +172,7 @@
       <workItem from="1726539312460" duration="485000" />
       <workItem from="1727145500617" duration="490000" />
       <workItem from="1727241443973" duration="1540000" />
+      <workItem from="1727246928203" duration="949000" />
     </task>
     <task id="LOCAL-00001" summary="Новая версия">
       <option name="closed" value="true" />
@@ -234,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727242975016</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Дополнено Read.me">
+      <option name="closed" value="true" />
+      <created>1727247536106</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1727247536106</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -247,6 +259,7 @@
     <MESSAGE value="Убрано отслеживание" />
     <MESSAGE value="Создана консольная утилита для добавления участков" />
     <MESSAGE value="Config файл для подключения." />
-    <option name="LAST_COMMIT_MESSAGE" value="Config файл для подключения." />
+    <MESSAGE value="Дополнено Read.me" />
+    <option name="LAST_COMMIT_MESSAGE" value="Дополнено Read.me" />
   </component>
 </project>
