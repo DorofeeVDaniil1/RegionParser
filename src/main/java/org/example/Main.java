@@ -59,7 +59,12 @@ public class Main {
                 region = sc.nextLine();
                 System.out.println("Введите Название участка:");
                 place = sc.nextLine();
-                findCoordinatesRegions(region, place, path);
+                if (findCoordinatesRegions(region, place, path)){
+                    continue;
+                }
+                else {
+                    break;
+                }
             }
 
             if (type.equals("1")) {

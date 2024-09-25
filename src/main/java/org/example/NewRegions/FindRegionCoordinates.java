@@ -13,14 +13,14 @@ import org.json.JSONObject;
 public class FindRegionCoordinates {
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    public static void findCoordinatesRegions(String region, String place, String path) {
+    public static boolean findCoordinatesRegions(String region, String place, String path) {
         try {
             // Получаем границы области (bounding box) для заданного региона
             String regionBoundingBox = getRegionBoundingBox(region);
 
             if (regionBoundingBox == null) {
                 System.out.println("Не удалось получить границы для региона.");
-                return;
+                return false;
             }
 
             // Теперь ищем место в пределах этой области
@@ -85,6 +85,7 @@ public class FindRegionCoordinates {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 
 
