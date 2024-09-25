@@ -60,15 +60,14 @@ public class Main {
                 geoPolygonCreator.RunParserDBCoordinates(debugMode, path);
 
                 // Спросить о повторном запуске
-                System.out.println("Повторить запуск? Y/N");
-                if (!sc.nextLine().equalsIgnoreCase("Y")) {
-                    break;  // Завершаем цикл, если пользователь не хочет повторять
-                }
-
-                // Спросить о смене региона
-                System.out.println("Изменить регион? Y/N");
+                System.out.println("1) Повторить запуск?  Y/N\n 2) Повторить запуск и сменить регион? YES/NO ");
                 if (sc.nextLine().equalsIgnoreCase("Y")) {
-                    region = null;  // Сбрасываем регион для нового ввода
+
+                } else if (sc.nextLine().equalsIgnoreCase("YES")) {
+                    region = null;
+                }
+                else {
+                    break;  // Завершаем цикл, если пользователь не хочет повторять
                 }
             }
         } else {
