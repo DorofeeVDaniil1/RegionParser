@@ -11,6 +11,8 @@ import static org.example.NewRegions.FindRegionCoordinates.findCoordinatesRegion
 public class Main {
 
     public static String authToken;
+    public static String domain;
+    public static String place;
 
     public static void main(String[] args) {
         GeoPolygonCreator geoPolygonCreator = new GeoPolygonCreator();
@@ -18,7 +20,7 @@ public class Main {
 
         // Получение пользовательских данных для конфигурации
         System.out.println("Введите домен для сайта:");
-        String domain = sc.nextLine();
+        domain = sc.nextLine();
         System.out.println("Введите Логин пользователя:");
         String username = sc.nextLine();
         System.out.println("Введите Пароль пользователя:");
@@ -49,7 +51,7 @@ public class Main {
 
                 // Ввод названия участка
                 System.out.println("Введите Название участка:");
-                String place = sc.nextLine();
+                place = sc.nextLine();
                 findCoordinatesRegions(region, place, path);
 
                 // Запуск процесса в зависимости от отладочного режима

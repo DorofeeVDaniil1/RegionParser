@@ -13,8 +13,7 @@ import org.example.Configuration.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static com.sun.jmx.defaults.ServiceName.DOMAIN;
-import static org.example.Main.authToken;
+import static org.example.Main.*;
 
 public class GeoPolygonCreator {
 
@@ -111,8 +110,11 @@ public class GeoPolygonCreator {
         sendGeoPolyRequest(json, name, type);
     }
 
+
     private  void sendGeoPolyRequest(JSONObject json, String name, String type) {
         String TOKEN = authToken;
+        String DOMAIN = domain;
+        String PLACE = place;
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -128,7 +130,7 @@ public class GeoPolygonCreator {
             JSONObject responseBody = new JSONObject(response.body());
             String id = responseBody.getJSONObject("data").getJSONObject("createGeoPolygon").getString("id");
             System.out.println(name + " [" + type + "] : " + id);
-            System.out.println("select new_region('"+ "Название региона" +"' ,'"+id+"', уровень);");;
+            System.out.println("select new_region('"+ PLACE +"' ,'"+id+"', уровень);");;
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }

@@ -21,6 +21,8 @@ public class Config {
         return "https://"+ DOMAIN+ "/app/graphql";
     }
 
+
+
     public String getAUTH_URL() {
         String string = "https://" + DOMAIN + "/app/api/v1/authenticate";
         return string;
