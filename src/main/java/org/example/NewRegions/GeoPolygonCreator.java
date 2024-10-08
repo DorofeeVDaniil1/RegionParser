@@ -11,6 +11,7 @@ import java.util.*;
 
 import org.example.Configuration.Config;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import static org.example.Main.*;
@@ -85,19 +86,32 @@ public class GeoPolygonCreator {
         }
     }
 
-    private  void setGeoPoly(JSONArray coords, String name, String type) {
+    private void setGeoPoly(JSONArray coords, String name, String type) {
         String query = "mutation createGeoPolygon($lanlngSet: [LatLngInput]){  createGeoPolygon(lanlngSet: $lanlngSet){ id }}";
         JSONObject json = new JSONObject();
         json.put("query", query);
 
         JSONArray latLngArray = new JSONArray();
         for (int i = 0; i < coords.length(); i++) {
-            JSONArray coord = coords.getJSONArray(i);
-            Map<String, Object> latLngMap = new HashMap<>();
-            latLngMap.put("order", i);
-            latLngMap.put("latitude", coord.getDouble(1));
-            latLngMap.put("longitude", coord.getDouble(0));
-            latLngArray.put(new JSONObject(latLngMap));
+            // Проверяем, является ли элемент массивом координат
+            if (coords.get(i) instanceof JSONArray) {
+                JSONArray coord = coords.getJSONArray(i);
+                if (coord.length() >= 2) { // Убедимся, что есть как минимум две координаты (долгота и широта)
+                    Map<String, Object> latLngMap = new HashMap<>();
+                    latLngMap.put("order", i);
+
+                    // Проверяем, что координаты являются числами
+                    if (coord.get(1) instanceof Number && coord.get(0) instanceof Number) {
+                        latLngMap.put("latitude", coord.getDouble(1));
+                        latLngMap.put("longitude", coord.getDouble(0));
+                        latLngArray.put(new JSONObject(latLngMap));
+                    } else {
+                        throw new JSONException("Invalid coordinate data: " + coord);
+                    }
+                }
+            } else {
+                throw new JSONException("Invalid data format at index " + i + ": expected JSONArray but found " + coords.get(i).getClass().getSimpleName());
+            }
         }
 
         latLngArray.put(latLngArray.get(0)); // Замыкаем полигон
@@ -109,6 +123,7 @@ public class GeoPolygonCreator {
 
         sendGeoPolyRequest(json, name, type);
     }
+
 
 
     private  void sendGeoPolyRequest(JSONObject json, String name, String type) {

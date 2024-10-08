@@ -22,8 +22,7 @@ public class Main {
         String path = config.create_txt_file_from_path();  // Создание файла по указанному пути
         authToken = getIdToken(config);  // Получение JWT токена
 
-        String type = getLaunchType(sc);
-        executeTask(sc, geoPolygonCreator, path, type);
+        executeTask(sc, geoPolygonCreator, path);
     }
 
     // Метод для получения конфигурации от пользователя
@@ -50,11 +49,14 @@ public class Main {
 
 
     // Метод для выполнения основной задачи
-    private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path, String type) {
+    private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path) {
+        String type = getLaunchType(sc);
+
         String region = null;
         boolean debugMode;
+        String type1 = type;
         while (true) {
-            if (type.equals("2") && region == null) {
+            if (type1.equals("2")) {
                 System.out.println("Введите Регион, где будет участок:");
                 region = sc.nextLine();
                 System.out.println("Введите Название участка:");
@@ -64,7 +66,7 @@ public class Main {
                 }
             }
 
-            if (type.equals("1")) {
+            if (type1.equals("1")) {
                 System.out.println("Проверьте, что вы изменили файл по пути " + path);
             }
 
@@ -85,9 +87,7 @@ public class Main {
                 break;
             }
 
-            if (askForRegionChange(sc)) {
-                region = null;
-            }
+
         }
     }
 
