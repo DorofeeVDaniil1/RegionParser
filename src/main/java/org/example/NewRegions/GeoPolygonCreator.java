@@ -1,34 +1,28 @@
-package org.example;
+package org.example.NewRegions;
 
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
+import org.example.Configuration.Config;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import static org.example.Main.*;
 
 public class GeoPolygonCreator {
 
-    private static final String DOMAIN = "домен";
-    private static final String TOKEN = "КОД";
-    private static final boolean DEBUG_MODE = false;
 
-    private static final JSONObject GEOJSON = (JSONObject) loadGeoJsonFromResources("coordinates.json");
 
-    public static void main(String[] args) {
+
+    public  void RunParserDBCoordinates(Boolean DEBUG_MODE, String path) {
+        JSONObject GEOJSON =  loadGeoJsonFromFileSystem(path);
         JSONArray features = GEOJSON.getJSONArray("features");
         for (int i = 0; i < features.length(); i++) {
             JSONObject feature = features.getJSONObject(i);
@@ -43,11 +37,8 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static JSONObject loadGeoJsonFromResources(String fileName) {
-        try (InputStream inputStream = GeoPolygonCreator.class.getClassLoader().getResourceAsStream(fileName)) {
-            if (inputStream == null) {
-                throw new RuntimeException("Ресурс не найден: " + fileName);
-            }
+    private static JSONObject loadGeoJsonFromFileSystem(String filePath) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             // Преобразование InputStream в строку
             String json = new Scanner(inputStream, StandardCharsets.UTF_8).useDelimiter("\\A").next();
             // Преобразование строки в JSONObject
@@ -58,7 +49,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void debugGeoJSON(String type, JSONArray coordinates) {
+    private  void debugGeoJSON(String type, JSONArray coordinates) {
         System.out.println("Type: " + type);
         if ("MultiPolygon".equals(type)) {
             for (int i = 0; i < coordinates.length(); i++) {
@@ -78,7 +69,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void processGeoJSON(String type, JSONArray coordinates, String name) {
+    private  void processGeoJSON(String type, JSONArray coordinates, String name) {
         if ("MultiPolygon".equals(type)) {
             for (int i = 0; i < coordinates.length(); i++) {
                 JSONArray polygon = coordinates.getJSONArray(i);
@@ -95,19 +86,32 @@ public class GeoPolygonCreator {
         }
     }
 
-    private static void setGeoPoly(JSONArray coords, String name, String type) {
+    private void setGeoPoly(JSONArray coords, String name, String type) {
         String query = "mutation createGeoPolygon($lanlngSet: [LatLngInput]){  createGeoPolygon(lanlngSet: $lanlngSet){ id }}";
         JSONObject json = new JSONObject();
         json.put("query", query);
 
         JSONArray latLngArray = new JSONArray();
         for (int i = 0; i < coords.length(); i++) {
-            JSONArray coord = coords.getJSONArray(i);
-            Map<String, Object> latLngMap = new HashMap<>();
-            latLngMap.put("order", i);
-            latLngMap.put("latitude", coord.getDouble(1));
-            latLngMap.put("longitude", coord.getDouble(0));
-            latLngArray.put(new JSONObject(latLngMap));
+            // Проверяем, является ли элемент массивом координат
+            if (coords.get(i) instanceof JSONArray) {
+                JSONArray coord = coords.getJSONArray(i);
+                if (coord.length() >= 2) { // Убедимся, что есть как минимум две координаты (долгота и широта)
+                    Map<String, Object> latLngMap = new HashMap<>();
+                    latLngMap.put("order", i);
+
+                    // Проверяем, что координаты являются числами
+                    if (coord.get(1) instanceof Number && coord.get(0) instanceof Number) {
+                        latLngMap.put("latitude", coord.getDouble(1));
+                        latLngMap.put("longitude", coord.getDouble(0));
+                        latLngArray.put(new JSONObject(latLngMap));
+                    } else {
+                        throw new JSONException("Invalid coordinate data: " + coord);
+                    }
+                }
+            } else {
+                throw new JSONException("Invalid data format at index " + i + ": expected JSONArray but found " + coords.get(i).getClass().getSimpleName());
+            }
         }
 
         latLngArray.put(latLngArray.get(0)); // Замыкаем полигон
@@ -120,7 +124,12 @@ public class GeoPolygonCreator {
         sendGeoPolyRequest(json, name, type);
     }
 
-    private static void sendGeoPolyRequest(JSONObject json, String name, String type) {
+
+
+    private  void sendGeoPolyRequest(JSONObject json, String name, String type) {
+        String TOKEN = authToken;
+        String DOMAIN = domain;
+        String PLACE = place;
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -136,7 +145,7 @@ public class GeoPolygonCreator {
             JSONObject responseBody = new JSONObject(response.body());
             String id = responseBody.getJSONObject("data").getJSONObject("createGeoPolygon").getString("id");
             System.out.println(name + " [" + type + "] : " + id);
-            System.out.println("select new_region(название ,'"+id+"', уровень);");;
+            System.out.println("select new_region('"+ PLACE +"' ,'"+id+"', уровень);");;
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
