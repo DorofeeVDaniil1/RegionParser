@@ -7,16 +7,62 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 import org.example.Configuration.Config;
+import org.example.Main;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import static org.example.Main.*;
+import static org.example.database.Database.*;
 
 public class GeoPolygonCreator {
+    // Метод для добавления нового региона в БД
+    public static void addRegionToDB(String regionName, String id) {
+        Scanner sc = new Scanner(System.in);
+        String selectQuery = "select new_region(?, ?, ?, ?, ?)";
+        String updateQuery = "update dsp_region set fill_color=? where parent_id=(select id from dsp_region where name=?)";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            // Выполнение вызова функции new_region
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
+                preparedStatement.setString(1, regionName); // Имя региона
+                preparedStatement.setObject(2, java.util.UUID.fromString(id)); // Преобразуем строку в UUID
+                preparedStatement.setInt(3, 1); // Пример: status
+                preparedStatement.setString(4, "parent"); // Пример: parent
+                preparedStatement.setString(5, "#FFFFFF"); // Цвет по умолчанию (или любой другой)
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        System.out.println("Функция выполнена успешно, результат: " + resultSet.getString(1));
+                    } else {
+                        System.out.println("Функция не вернула результата.");
+                    }
+                }
+            }
+
+            // Выполнение обновления цвета регионов
+            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                updateStatement.setString(1, color); // Пример: новый цвет
+                updateStatement.setString(2, parent); // Имя родительского региона
+
+                int rowsUpdated = updateStatement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    System.out.println("Обновлено записей: " + rowsUpdated);
+                } else {
+                    System.out.println("Записи для обновления не найдены.");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Ошибка при добавлении региона в БД: " + e.getMessage());
+        }
+    }
 
 
 
@@ -69,7 +115,7 @@ public class GeoPolygonCreator {
         }
     }
 
-    private  void processGeoJSON(String type, JSONArray coordinates, String name) {
+    private  void processGeoJSON (String type, JSONArray coordinates, String name) throws JSONException {
         if ("MultiPolygon".equals(type)) {
             for (int i = 0; i < coordinates.length(); i++) {
                 JSONArray polygon = coordinates.getJSONArray(i);
@@ -145,7 +191,8 @@ public class GeoPolygonCreator {
             JSONObject responseBody = new JSONObject(response.body());
             String id = responseBody.getJSONObject("data").getJSONObject("createGeoPolygon").getString("id");
             System.out.println(name + " [" + type + "] : " + id);
-            System.out.println("select new_region('"+ PLACE +"' ,'"+id+"', уровень);");;
+            System.out.println("select new_region('"+ place_bd +"' ,'"+id+"', 1,'Самарская область');");
+            addRegionToDB(PLACE,id);
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }

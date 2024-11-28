@@ -3,6 +3,9 @@ package org.example;
 import org.example.Configuration.Config;
 import org.example.NewRegions.GeoPolygonCreator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.example.BearToken.BearTocken.getIdToken;
@@ -13,7 +16,9 @@ public class Main {
     public static String authToken;
     public static String domain;
     public static String place;
-
+    public static String place_bd;
+    public static String parent;
+    public static String color;
     public static void main(String[] args) {
         GeoPolygonCreator geoPolygonCreator = new GeoPolygonCreator();
         Scanner sc = new Scanner(System.in);
@@ -28,13 +33,13 @@ public class Main {
     // Метод для получения конфигурации от пользователя
     private static Config getUserConfig(Scanner sc) {
         System.out.println("Введите домен для сайта:");
-        domain = sc.nextLine();
+        domain = "disp.t1.groupstp.ru";
         System.out.println("Введите Логин пользователя:");
-        String username = sc.nextLine();
+        String username ="sysadmin";
         System.out.println("Введите Пароль пользователя:");
-        String password = sc.nextLine();
+        String password = "MOdSqw9S";
         System.out.println("Введите путь для сохранения файла (например: C:/Users/user/Documents):");
-        String outputFilePath = sc.nextLine();
+        String outputFilePath = "D:\\samara";
 
         return new Config(username, password, domain, outputFilePath);
     }
@@ -50,82 +55,108 @@ public class Main {
 
     private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path) {
         String type = getLaunchType(sc); // Получаем тип запуска
-        String[] regions = null;         // Массив для регионов
-        String place = null;
-        boolean debugMode;
+        String region = "Bogatovsky District, Samara Oblast"; // Фиксированный регион
+        List<String> places = new ArrayList<>(); // Список участков
+
 
         while (true) {
             if (type.equals("2")) { // Если выбран автоматический режим
-                if (regions == null || place == null) { // Если регионы и участок не заданы, запрашиваем их
-                    System.out.println("Введите регионы через ; (например: Москва; Санкт-Петербург):");
-                    String regionsInput = sc.nextLine();
-                    regions = regionsInput.split(";"); // Разделяем регионы по символу ';'
+                System.out.println("Укажите имя родителя участка");
+                parent = sc.nextLine();
+                System.out.println("Укажите цвет районов");
+                color = sc.nextLine();
+                if (places.isEmpty()) { // Если участки не заданы, запрашиваем их
+                    System.out.println("Введите участки через ';':");
+                    String placesInput = sc.nextLine();
 
-                    System.out.println("Введите Название участка для всех регионов:");
-                    place = sc.nextLine();
+                    places = Arrays.asList(placesInput.split(";")); // Разделяем участки по символу ';'
                 } else {
-                    System.out.println("Текущие регионы: " + String.join(", ", regions) + ", участок: " + place);
-                    System.out.println("Хотите изменить регионы и участок? (Y/N)");
+                    System.out.println("Текущие участки: " + String.join(", ", places));
+                    System.out.println("Хотите изменить список участков? (Y/N)");
                     if (sc.nextLine().equalsIgnoreCase("Y")) {
-                        System.out.println("Введите новые регионы через ;:");
-                        String regionsInput = sc.nextLine();
-                        regions = regionsInput.split(";");
-
-                        System.out.println("Введите новое Название участка:");
-                        place = sc.nextLine();
+                        places.clear(); // Очищаем список участков
+                        System.out.println("Введите новые участки через ';':");
+                        String placesInput = sc.nextLine();
+                        places = Arrays.asList(placesInput.split(";")); // Обновляем список участков
                     }
                 }
 
-                // Обрабатываем каждый регион
-                for (String region : regions) {
-                    region = region.trim();  // Убираем пробелы в начале и конце
-                    System.out.println("Обработка региона: " + region);
+                // Обрабатываем фиксированный регион и введенные участки
+                for (String place : places) {
+                    place = place.trim(); // Убираем пробелы в начале и конце
+                    place_bd=place;
+                    System.out.println("Обработка региона: " + region + ", участка: " + place);
 
-                    // Проверяем координаты для каждого региона и участка
+                    // Проверяем координаты для фиксированного региона и участков
                     if (!findCoordinatesRegions(region, place, path)) {
-                        System.out.println("Не удалось найти координаты для региона: " + region);
-                        continue;  // Продолжаем со следующим регионом, если ошибка
+                        System.out.println("Не удалось найти координаты для участка: " + place);
+                        continue; // Продолжаем с следующим участком, если ошибка
+                    }else {
+                        runTask(geoPolygonCreator,path);
                     }
+
                 }
             }
 
             if (type.equals("1")) { // Если выбран ручной режим с файлом
+                System.out.println("Укажите название для региона:");
+                place_bd= sc.next();
                 System.out.println("Проверьте, что вы изменили файл по пути " + path);
+                runTask(geoPolygonCreator,path);
             }
 
-            // Запускаем основную логику парсера
-            debugMode = isDebugMode(sc); // Проверяем режим отладки
-            geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение с указанными параметрами
 
-            // Если тестовый режим был включен, предлагаем выполнить задачу без теста
-            if (debugMode) {
-                System.out.println("Хотите выполнить эту же задачу без теста? (Y/N)");
-                if (sc.nextLine().equalsIgnoreCase("Y")) {
-                    debugMode = false;  // Отключаем тестовый режим
-                    geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста
-                }
-            }
 
             // Предлагаем повторить запуск или сменить тип запуска
             System.out.println("Хотите повторить запуск или сменить тип запуска? (1 - Свой файл, 2 - Автоматический, N - Завершить)");
             String restartChoice = sc.nextLine();
             if (restartChoice.equalsIgnoreCase("N")) {
-                break;  // Завершаем цикл, если выбрано завершение
+                break; // Завершаем цикл, если выбрано завершение
             } else if (restartChoice.equals("1") || restartChoice.equals("2")) {
-                type = restartChoice;  // Меняем тип запуска
+                type = restartChoice; // Меняем тип запуска
             }
 
-            // Запрашиваем, нужно ли поменять регионы для автоматического режима
+            // Запрашиваем, нужно ли поменять участки для автоматического режима
             if (type.equals("2")) {
-                System.out.println("Хотите сменить регионы? (Y/N)");
+                System.out.println("Хотите сменить список участков? (Y/N)");
                 if (sc.nextLine().equalsIgnoreCase("Y")) {
-                    regions = null;  // Обнуляем регионы и участок, чтобы их можно было ввести снова
-                    place = null;
+                    places.clear(); // Очищаем список участков, чтобы их можно было ввести снова
                 }
             }
         }
     }
+    private static void runTask(GeoPolygonCreator geoPolygonCreator,String path) {
+        boolean debugMode;
+        Scanner sc = new Scanner(System.in);
+        // Запускаем основную логику парсера
+        debugMode = isDebugMode(sc); // Проверяем режим отладки
+        geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение с указанными параметрами
 
+        // Если тестовый режим был включен, предлагаем выполнить задачу без теста
+        if (debugMode) {
+            System.out.println("Хотите выполнить эту же задачу без теста? (Y/N)");
+            if (sc.nextLine().equalsIgnoreCase("Y")) {
+                debugMode = false; // Отключаем тестовый режим
+                geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста
+            }
+        }
+    }
+    private static void runTask(GeoPolygonCreator geoPolygonCreator,String path,String name) {
+        boolean debugMode;
+        Scanner sc = new Scanner(System.in);
+        // Запускаем основную логику парсера
+        debugMode = isDebugMode(sc); // Проверяем режим отладки
+        geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение с указанными параметрами
+
+        // Если тестовый режим был включен, предлагаем выполнить задачу без теста
+        if (debugMode) {
+            System.out.println("Хотите выполнить эту же задачу без теста? (Y/N)");
+            if (sc.nextLine().equalsIgnoreCase("Y")) {
+                debugMode = false; // Отключаем тестовый режим
+                geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста
+            }
+        }
+    }
 
 
 

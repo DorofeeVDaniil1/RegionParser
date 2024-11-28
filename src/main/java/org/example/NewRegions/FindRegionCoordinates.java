@@ -15,6 +15,9 @@ public class FindRegionCoordinates {
     private static final String USER_AGENT = "Mozilla/5.0";
     public static boolean findCoordinatesRegions(String region, String place, String path) {
         try {
+            // Объединяем регион и район в один поисковый запрос
+            String fullRegionQuery = region;
+
             // Получаем границы области (bounding box) для заданного региона
             String regionBoundingBox = getRegionBoundingBox(region);
 
