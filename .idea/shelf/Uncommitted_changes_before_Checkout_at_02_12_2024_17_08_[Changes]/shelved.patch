@@ -1,0 +1,113 @@
+Index: src/main/java/org/example/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.example;\r\n\r\n<<<<<<< HEAD\r\nimport static org.example.NewRegions.ExcelCoordinatesParserName.excelRegionsParser;\r\nimport static org.example.NewRegions.GeoPolygonCreator.RunParserDBCoordinates;\r\nimport static org.example.NewRegions.FindRegionCoordinates.findCoordinatesRegions;\r\n\r\npublic class Main {\r\n    public static final String INPUT_FILE_PATH = \"D:\\\\Styding\\\\Java Spring\\\\NodeParcer\\\\src\\\\main\\\\resources\\\\1.xlsx\";  // Путь к Excel-файлу\r\n    public static final String OUTPUT_FILE_PATH = \"D:\\\\Styding\\\\Java Spring\\\\NodeParcer\\\\src\\\\main\\\\resources\\\\out.xlsx\";  // Файл для сохранения с результатами\r\n    public static final String REGION = \"Amur Oblast\";\r\n    public static final String PLACE =\"городской округ Зея\";\r\n    private static final boolean DEBUG_MODE = true;\r\n\r\n    public static void main(String[] args) {\r\n        //excelRegionsParser(INPUT_FILE_PATH,OUTPUT_FILE_PATH);\r\n       //findCoordinatesRegions(REGION,PLACE);\r\n       RunParserDBCoordinates(DEBUG_MODE);\r\n=======\r\nimport org.example.Configuration.Config;\r\nimport org.example.NewRegions.GeoPolygonCreator;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\nimport java.util.Scanner;\r\n\r\nimport static org.example.BearToken.BearTocken.getIdToken;\r\nimport static org.example.NewRegions.FindRegionCoordinates.findCoordinatesRegions;\r\n\r\npublic class Main {\r\n\r\n    public static String authToken;\r\n    public static String domain;\r\n    public static String place;\r\n    public static String place_bd;\r\n    public static String parent;\r\n    public static String color;\r\n    public static void main(String[] args) {\r\n        GeoPolygonCreator geoPolygonCreator = new GeoPolygonCreator();\r\n        Scanner sc = new Scanner(System.in);\r\n\r\n        Config config = getUserConfig(sc);\r\n        String path = config.create_txt_file_from_path();  // Создание файла по указанному пути\r\n        authToken = getIdToken(config);  // Получение JWT токена\r\n\r\n        executeTask(sc, geoPolygonCreator, path);\r\n    }\r\n\r\n    // Метод для получения конфигурации от пользователя\r\n    private static Config getUserConfig(Scanner sc) {\r\n        System.out.println(\"Введите домен для сайта: Например:samara.mytko\");\r\n        domain = sc.nextLine();\r\n        System.out.println(\"Введите Логин пользователя:\");\r\n        String username =sc.nextLine();\r\n        System.out.println(\"Введите Пароль пользователя:\");\r\n        String password = sc.nextLine();\r\n        System.out.println(\"Введите путь для сохранения файла (например: C:/Users/user/Documents):\");\r\n        String outputFilePath = sc.nextLine();\r\n\r\n        return new Config(username, password, domain, outputFilePath);\r\n    }\r\n\r\n    // Метод для выбора типа запуска\r\n    private static String getLaunchType(Scanner sc) {\r\n        System.out.println(\"Как вы хотите запустить программу? (Введите цифру 1/2)\\n\" +\r\n                \"1 - Свой GeoJSON файл\\n\" +\r\n                \"2 - Автоматическое создание GeoJson файла по названию региона и участка?\");\r\n        return sc.nextLine();\r\n    }\r\n\r\n\r\n    private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path) {\r\n        String type = getLaunchType(sc); // Получаем тип запуска\r\n        System.out.println(\"Укажите имя района и  области. Например: Shigonsky District, Samara Oblast\");\r\n        String region = sc.nextLine(); // Фиксированный регион\r\n        List<String> places = new ArrayList<>(); // Список участков\r\n\r\n\r\n        while (true) {\r\n            if (type.equals(\"2\")) { // Если выбран автоматический режим\r\n                System.out.println(\"Укажите имя родителя участка\");\r\n                parent = sc.nextLine();\r\n                System.out.println(\"Укажите цвет районов\");\r\n                color = sc.nextLine();\r\n                if (places.isEmpty()) { // Если участки не заданы, запрашиваем их\r\n                    System.out.println(\"Введите участки через ';':\");\r\n                    String placesInput = sc.nextLine();\r\n\r\n                    places = Arrays.asList(placesInput.split(\";\")); // Разделяем участки по символу ';'\r\n                } else {\r\n                    System.out.println(\"Текущие участки: \" + String.join(\", \", places));\r\n                    System.out.println(\"Хотите изменить список участков? (Y/N)\");\r\n                    if (sc.nextLine().equalsIgnoreCase(\"Y\")) {\r\n                        places.clear(); // Очищаем список участков\r\n                        System.out.println(\"Введите новые участки через ';':\");\r\n                        String placesInput = sc.nextLine();\r\n                        places = Arrays.asList(placesInput.split(\";\")); // Обновляем список участков\r\n                    }\r\n                }\r\n\r\n                // Обрабатываем фиксированный регион и введенные участки\r\n                for (String place : places) {\r\n                    place = place.trim(); // Убираем пробелы в начале и конце\r\n                    place_bd=place;\r\n                    System.out.println(\"Обработка региона: \" + region + \", участка: \" + place);\r\n\r\n                    // Проверяем координаты для фиксированного региона и участков\r\n                    if (!findCoordinatesRegions(region, place, path)) {\r\n                        System.out.println(\"Не удалось найти координаты для участка: \" + place);\r\n                        continue; // Продолжаем с следующим участком, если ошибка\r\n                    }else {\r\n                        runTask(geoPolygonCreator,path);\r\n                    }\r\n\r\n                }\r\n            }\r\n\r\n            if (type.equals(\"1\")) { // Если выбран ручной режим с файлом\r\n                System.out.println(\"Укажите название для региона:\");\r\n                place_bd= sc.nextLine();\r\n                System.out.println(\"Укажите имя родителя участка\");\r\n                parent = sc.nextLine();\r\n                System.out.println(\"Укажите цвет районов\");\r\n                color = sc.nextLine();\r\n                System.out.println(\"Проверьте, что вы изменили файл по пути \" + path);\r\n                runTask(geoPolygonCreator,path);\r\n            }\r\n\r\n\r\n\r\n            // Предлагаем повторить запуск или сменить тип запуска\r\n            System.out.println(\"Хотите повторить запуск или сменить тип запуска? (1 - Свой файл, 2 - Автоматический, N - Завершить)\");\r\n            String restartChoice = sc.nextLine();\r\n            if (restartChoice.equalsIgnoreCase(\"N\")) {\r\n                break; // Завершаем цикл, если выбрано завершение\r\n            } else if (restartChoice.equals(\"1\") || restartChoice.equals(\"2\")) {\r\n                type = restartChoice; // Меняем тип запуска\r\n            }\r\n\r\n            // Запрашиваем, нужно ли поменять участки для автоматического режима\r\n            if (type.equals(\"2\")) {\r\n                System.out.println(\"Хотите сменить список участков? (Y/N)\");\r\n                if (sc.nextLine().equalsIgnoreCase(\"Y\")) {\r\n                    places.clear(); // Очищаем список участков, чтобы их можно было ввести снова\r\n                }\r\n            }\r\n        }\r\n    }\r\n    private static void runTask(GeoPolygonCreator geoPolygonCreator,String path) {\r\n        boolean debugMode;\r\n        Scanner sc = new Scanner(System.in);\r\n        // Запускаем основную логику парсера\r\n        debugMode = isDebugMode(sc); // Проверяем режим отладки\r\n        geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение с указанными параметрами\r\n\r\n        // Если тестовый режим был включен, предлагаем выполнить задачу без теста\r\n        if (debugMode) {\r\n            System.out.println(\"Хотите выполнить эту же задачу без теста? (Y/N)\");\r\n            if (sc.nextLine().equalsIgnoreCase(\"Y\")) {\r\n                debugMode = false; // Отключаем тестовый режим\r\n                geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста\r\n            }\r\n        }\r\n    }\r\n    private static void runTask(GeoPolygonCreator geoPolygonCreator,String path,String name) {\r\n        boolean debugMode;\r\n        Scanner sc = new Scanner(System.in);\r\n        // Запускаем основную логику парсера\r\n        debugMode = isDebugMode(sc); // Проверяем режим отладки\r\n        geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение с указанными параметрами\r\n\r\n        // Если тестовый режим был включен, предлагаем выполнить задачу без теста\r\n        if (debugMode) {\r\n            System.out.println(\"Хотите выполнить эту же задачу без теста? (Y/N)\");\r\n            if (sc.nextLine().equalsIgnoreCase(\"Y\")) {\r\n                debugMode = false; // Отключаем тестовый режим\r\n                geoPolygonCreator.RunParserDBCoordinates(debugMode, path); // Выполнение без теста\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n    // Метод для проверки режима отладки\r\n    private static boolean isDebugMode(Scanner sc) {\r\n        System.out.println(\"Хотите запустить без тестового запуска? Y/N\");\r\n        return !sc.nextLine().equalsIgnoreCase(\"Y\");\r\n    }\r\n\r\n    // Метод для запроса на повторный запуск\r\n    private static boolean askForRestart(Scanner sc) {\r\n        System.out.println(\"Повторить запуск? Y/N\");\r\n        return sc.nextLine().equalsIgnoreCase(\"Y\");\r\n    }\r\n\r\n    // Метод для запроса на смену региона\r\n    private static boolean askForRegionChange(Scanner sc) {\r\n        System.out.println(\"Повторить запуск и сменить регион? YES/NO\");\r\n        return sc.nextLine().equalsIgnoreCase(\"YES\");\r\n>>>>>>> origin/main\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/example/Main.java b/src/main/java/org/example/Main.java
+--- a/src/main/java/org/example/Main.java	(revision 6063c7bf7ca9fcf826977c9e3e636e0e2a752a9a)
++++ b/src/main/java/org/example/Main.java	(date 1733130499426)
+@@ -1,22 +1,5 @@
+ package org.example;
+ 
+-<<<<<<< HEAD
+-import static org.example.NewRegions.ExcelCoordinatesParserName.excelRegionsParser;
+-import static org.example.NewRegions.GeoPolygonCreator.RunParserDBCoordinates;
+-import static org.example.NewRegions.FindRegionCoordinates.findCoordinatesRegions;
+-
+-public class Main {
+-    public static final String INPUT_FILE_PATH = "D:\\Styding\\Java Spring\\NodeParcer\\src\\main\\resources\\1.xlsx";  // Путь к Excel-файлу
+-    public static final String OUTPUT_FILE_PATH = "D:\\Styding\\Java Spring\\NodeParcer\\src\\main\\resources\\out.xlsx";  // Файл для сохранения с результатами
+-    public static final String REGION = "Amur Oblast";
+-    public static final String PLACE ="городской округ Зея";
+-    private static final boolean DEBUG_MODE = true;
+-
+-    public static void main(String[] args) {
+-        //excelRegionsParser(INPUT_FILE_PATH,OUTPUT_FILE_PATH);
+-       //findCoordinatesRegions(REGION,PLACE);
+-       RunParserDBCoordinates(DEBUG_MODE);
+-=======
+ import org.example.Configuration.Config;
+ import org.example.NewRegions.GeoPolygonCreator;
+ 
+@@ -199,6 +182,5 @@
+     private static boolean askForRegionChange(Scanner sc) {
+         System.out.println("Повторить запуск и сменить регион? YES/NO");
+         return sc.nextLine().equalsIgnoreCase("YES");
+->>>>>>> origin/main
+     }
+ }
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"e71a145e-2e5b-41cf-a8e4-acfd4e72df52\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/example/GeoPolygonCreator.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/example/GeoPolygonCreator.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/resources/coordinates.json\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/resources/coordinates.json\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\"><![CDATA[{\r\n  \"associatedIndex\": 2\r\n}]]></component>\r\n  <component name=\"ProjectId\" id=\"2lXoV8umP5mR6BvXcZsaqGAu42V\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"Application.GeoPolygonCreator\">\r\n    <configuration name=\"GeoPolygonCreator\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.example.GeoPolygonCreator\" />\r\n      <module name=\"NodeParcer\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.example.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"YandexGeocodeExample\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.example.YandexGeocodeExample\" />\r\n      <module name=\"NodeParcer\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.example.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"YandexGeocoderExample\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.example.YandexGeocoderExample\" />\r\n      <module name=\"NodeParcer\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.example.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"YandexMapsApiExample\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.example.YandexMapsApiExample\" />\r\n      <module name=\"NodeParcer\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.example.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.GeoPolygonCreator\" />\r\n        <item itemvalue=\"Application.YandexGeocodeExample\" />\r\n        <item itemvalue=\"Application.YandexGeocoderExample\" />\r\n        <item itemvalue=\"Application.YandexMapsApiExample\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"e71a145e-2e5b-41cf-a8e4-acfd4e72df52\" name=\"Changes\" comment=\"\" />\r\n      <created>1725335805500</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1725335805500</updated>\r\n      <workItem from=\"1725335807657\" duration=\"8893000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 6063c7bf7ca9fcf826977c9e3e636e0e2a752a9a)
++++ b/.idea/workspace.xml	(date 1733130328770)
+@@ -25,30 +25,30 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="ProjectColorInfo"><![CDATA[{
+-  "associatedIndex": 2
+-}]]></component>
++  <component name="ProjectColorInfo">{
++  &quot;associatedIndex&quot;: 2
++}</component>
+   <component name="ProjectId" id="2lXoV8umP5mR6BvXcZsaqGAu42V" />
+   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "git-widget-placeholder": "main",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RunManager" selected="Application.GeoPolygonCreator">
+     <configuration name="GeoPolygonCreator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="org.example.GeoPolygonCreator" />
+@@ -104,10 +104,11 @@
+     </configuration>
+     <recent_temporary>
+       <list>
++        <item itemvalue="Application.YandexMapsApiExample" />
++        <item itemvalue="Application.YandexGeocoderExample" />
++        <item itemvalue="Application.YandexGeocodeExample" />
+         <item itemvalue="Application.GeoPolygonCreator" />
+-        <item itemvalue="Application.YandexGeocodeExample" />
+-        <item itemvalue="Application.YandexGeocoderExample" />
+-        <item itemvalue="Application.YandexMapsApiExample" />
++        <item itemvalue="Application.GeoPolygonCreator" />
+       </list>
+     </recent_temporary>
+   </component>

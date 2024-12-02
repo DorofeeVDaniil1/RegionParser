@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5139b0bd-be05-4365-b8b8-30bc11a88478" name="Changes" comment="Новая версия">
+    <list default="true" id="5139b0bd-be05-4365-b8b8-30bc11a88478" name="Changes" comment="Новая версия с автоматическим добавлением регионов множества регионов">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/NewRegions/GeoPolygonCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/NewRegions/GeoPolygonCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/NotPrepare.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Prepare.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Repeat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Test.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Your_file.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/Database.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,63 +27,41 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <excluded-from-favorite>
-      <branch-storage>
-        <map>
-          <entry type="LOCAL">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="main" />
-              </list>
-            </value>
-          </entry>
-        </map>
-      </branch-storage>
-    </excluded-from-favorite>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="find_all_subregions_APPLICATION" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleModuleStateConfig" initialized="true" />
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="2n9C6awENUwepmj6KurP5iaZoWD" />
+  <component name="ProjectId" id="2lXoV8umP5mR6BvXcZsaqGAu42V" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Excel (xlsx)&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;databaseconnect&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ssh.settings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;redshift&quot;,
-      &quot;postgresql&quot;
-    ]
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "databaseconnect",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="GeoJsonDirectionChecker" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.GeoJsonDirectionChecker" />
@@ -107,6 +89,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GeoPolygonCreator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.GeoPolygonCreator" />
+      <module name="NodeParcer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="NodeParcer" />
@@ -120,67 +115,46 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="YandexGeocodeExample" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.YandexGeocodeExample" />
+      <module name="NodeParcer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.GeoJsonDirectionReverser" />
         <item itemvalue="Application.GeoJsonDirectionChecker" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.GeoJsonDirectionChecker" />
+        <item itemvalue="Application.GeoPolygonCreator" />
+        <item itemvalue="Application.YandexGeocodeExample" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5139b0bd-be05-4365-b8b8-30bc11a88478" name="Changes" comment="" />
-      <created>1728375732896</created>
+      <changelist id="e71a145e-2e5b-41cf-a8e4-acfd4e72df52" name="Changes" comment="" />
+      <created>1725335805500</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1728375732896</updated>
-      <workItem from="1728375734294" duration="3417000" />
-      <workItem from="1728438558562" duration="1100000" />
-      <workItem from="1728451265766" duration="941000" />
-      <workItem from="1728458309726" duration="1703000" />
-      <workItem from="1728465203358" duration="4766000" />
-      <workItem from="1728473657867" duration="6720000" />
-      <workItem from="1729824049561" duration="305000" />
-      <workItem from="1729834753981" duration="472000" />
-      <workItem from="1730031593578" duration="3000" />
-      <workItem from="1730031689595" duration="13000" />
-      <workItem from="1731635670166" duration="1762000" />
-      <workItem from="1731648221161" duration="4743000" />
-      <workItem from="1731892880920" duration="52000" />
-      <workItem from="1731893543524" duration="30000" />
-      <workItem from="1732168448416" duration="6893000" />
-      <workItem from="1732261973345" duration="153000" />
-      <workItem from="1732497331879" duration="792000" />
-      <workItem from="1732511628673" duration="23963000" />
-      <workItem from="1732592149823" duration="11000" />
-      <workItem from="1732778836117" duration="9383000" />
-      <workItem from="1732842381271" duration="13553000" />
-      <workItem from="1732860709671" duration="989000" />
-      <workItem from="1732885461737" duration="34000" />
-      <workItem from="1732908578125" duration="1341000" />
-      <workItem from="1732932920962" duration="12000" />
-      <workItem from="1733064674251" duration="26355000" />
+      <updated>1725335805500</updated>
+      <workItem from="1725335807657" duration="8893000" />
     </task>
-    <task id="LOCAL-00001" summary="Новая версия">
-      <option name="closed" value="true" />
-      <created>1732792511673</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1732792511673</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Новая версия" />
-    <option name="LAST_COMMIT_MESSAGE" value="Новая версия" />
+    <MESSAGE value="Новая версия с автоматическим добавлением регионов множества регионов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Новая версия с автоматическим добавлением регионов множества регионов" />
   </component>
 </project>
