@@ -1,9 +1,19 @@
 package org.example.database;
 
 public class Database {
-    public static final String DB_URL = "jdbc:postgresql://localhost:5555/disp";
-    public static final String DB_USER = "";
-    public static final String DB_PASSWORD = "";
+    private  final String DB_URL = "jdbc:postgresql://host:port/db_name";
+    private  final String DB_USER = "owner";
+    private  final String DB_PASSWORD = "password";
 
+    public String getDB_URL() {
+        return DB_URL;
+    }
 
+    public  String getDB_USER() {
+        return DB_USER;
+    }
+
+    public String getDB_PASSWORD() {
+        return DB_PASSWORD;
+    }
 }

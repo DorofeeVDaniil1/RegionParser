@@ -15,6 +15,7 @@ import java.util.*;
 
 import org.example.Configuration.Config;
 import org.example.Main;
+import org.example.database.Database;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,25 +26,29 @@ import static org.example.database.Database.*;
 public class GeoPolygonCreator {
     // Метод для добавления нового региона в БД
     public static void addRegionToDB(String regionName, String id) {
-        Scanner sc = new Scanner(System.in);
+        //Получаем конифиги для подключения к БД
+        Database db = new Database();
+        String DB_URL = db.getDB_URL();
+        String DB_USER = db.getDB_USER();
+        String DB_PASSWORD = db.getDB_PASSWORD();
+
         String selectQuery = "select new_region(?, ?, ?, ?, ?)";
         String updateQuery = "update dsp_region set fill_color=? where parent_id=(select id from dsp_region where name=?)";
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            // Выполнение вызова функции new_region
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-                preparedStatement.setString(1, regionName); // Имя региона
-                preparedStatement.setObject(2, java.util.UUID.fromString(id)); // Преобразуем строку в UUID
-                preparedStatement.setInt(3, 1); // Пример: status
-                preparedStatement.setString(4, "parent"); // Пример: parent
-                preparedStatement.setString(5, "#FFFFFF"); // Цвет по умолчанию (или любой другой)
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        System.out.println("Функция выполнена успешно, результат: " + resultSet.getString(1));
-                    } else {
-                        System.out.println("Функция не вернула результата.");
-                    }
+            preparedStatement.setString(1, place_bd);
+            preparedStatement.setObject(2, java.util.UUID.fromString(id)); // Преобразуем строку в UUID
+            preparedStatement.setInt(3, 1);
+            preparedStatement.setString(4, parent);
+            preparedStatement.setString(5, color);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    System.out.println("Функция выполнена успешно, результат: " + resultSet.getString(1));
+                } else {
+                    System.out.println("Функция не вернула результата.");
                 }
             }
 

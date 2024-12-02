@@ -32,14 +32,14 @@ public class Main {
 
     // Метод для получения конфигурации от пользователя
     private static Config getUserConfig(Scanner sc) {
-        System.out.println("Введите домен для сайта:");
-        domain = "disp.t1.groupstp.ru";
+        System.out.println("Введите домен для сайта: Например:samara.mytko");
+        domain = sc.nextLine();
         System.out.println("Введите Логин пользователя:");
-        String username ="sysadmin";
+        String username =sc.nextLine();
         System.out.println("Введите Пароль пользователя:");
-        String password = "MOdSqw9S";
+        String password = sc.nextLine();
         System.out.println("Введите путь для сохранения файла (например: C:/Users/user/Documents):");
-        String outputFilePath = "D:\\samara";
+        String outputFilePath = sc.nextLine();
 
         return new Config(username, password, domain, outputFilePath);
     }
@@ -55,7 +55,8 @@ public class Main {
 
     private static void executeTask(Scanner sc, GeoPolygonCreator geoPolygonCreator, String path) {
         String type = getLaunchType(sc); // Получаем тип запуска
-        String region = "Bogatovsky District, Samara Oblast"; // Фиксированный регион
+        System.out.println("Укажите имя района и  области. Например: Shigonsky District, Samara Oblast");
+        String region = sc.nextLine(); // Фиксированный регион
         List<String> places = new ArrayList<>(); // Список участков
 
 
@@ -100,7 +101,11 @@ public class Main {
 
             if (type.equals("1")) { // Если выбран ручной режим с файлом
                 System.out.println("Укажите название для региона:");
-                place_bd= sc.next();
+                place_bd= sc.nextLine();
+                System.out.println("Укажите имя родителя участка");
+                parent = sc.nextLine();
+                System.out.println("Укажите цвет районов");
+                color = sc.nextLine();
                 System.out.println("Проверьте, что вы изменили файл по пути " + path);
                 runTask(geoPolygonCreator,path);
             }
