@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5139b0bd-be05-4365-b8b8-30bc11a88478" name="Changes" comment="Новая версия с автоматическим добавлением регионов множества регионов">
+    <list default="true" id="5139b0bd-be05-4365-b8b8-30bc11a88478" name="Changes" comment="Новая версия">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/NotPrepare.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Prepare.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Repeat.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Test.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Your_file.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/database/Database.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +56,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Styding\Java Spring\NodeParcer\images" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="GeoJsonDirectionChecker" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.GeoJsonDirectionChecker" />
@@ -148,6 +147,15 @@
       <updated>1725335805500</updated>
       <workItem from="1725335807657" duration="8893000" />
     </task>
+    <task id="LOCAL-00001" summary="Новая версия">
+      <option name="closed" value="true" />
+      <created>1733134985015</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733134985015</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +163,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Новая версия с автоматическим добавлением регионов множества регионов" />
-    <option name="LAST_COMMIT_MESSAGE" value="Новая версия с автоматическим добавлением регионов множества регионов" />
+    <MESSAGE value="Новая версия" />
+    <option name="LAST_COMMIT_MESSAGE" value="Новая версия" />
   </component>
 </project>
